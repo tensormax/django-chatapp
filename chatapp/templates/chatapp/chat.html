@@ -1,0 +1,169 @@
+{% extends "chatapp/base.html" %}
+{% load static %}
+
+{% block title %}Chat{% endblock %}
+
+{% block content %}
+
+<div class="chat-container">
+
+ <!-- Sidebar -->
+ <aside class="chat-sidebar" id="chat-sidebar">
+    <button id="toggle-sidebar" class="btn-toggle-sidebar">☰</button>
+    <button id="new-chat-btn" class="btn-new-chat">+ New Chat</button>
+
+    <h2 class="sidebar-title">Your Chats</h2>
+    <ul id="chat-sessions" class="chat-sessions-list">
+        <!-- Sessions loaded here -->
+    </ul>
+</aside>
+
+  <!-- Main Chat Area -->
+  <main class="chat-main">
+
+      <!-- Header -->
+      <div class="chat-header">
+          <h1>Chat</h1>
+      </div>
+
+      <!-- Messages -->
+      <div id="messages" class="chat-messages">
+          Loading...
+      </div>
+
+      <!-- Input Bar -->
+      <form id="chat-form" class="chat-input-form">
+          <input type="hidden" id="session-id" value="{{ session_id }}">
+          <textarea id="message-input" placeholder="Type your message..." class="chat-input"></textarea>
+          <button type="submit" class="btn-send">Send</button>
+      </form>
+
+  </main>
+
+</div>
+
+<!-- JS Script -->
+<script>
+
+  const sidebarEl = document.getElementById('chat-sidebar');
+  const toggleSidebarBtn = document.getElementById('toggle-sidebar');
+
+  toggleSidebarBtn.onclick = () => {
+    sidebarEl.classList.toggle('collapsed');
+  };
+
+  // Existing chat JS code for messages, history, sessions...
+  const sessionIdInput = document.getElementById('session-id');
+  const messagesDiv = document.getElementById('messages');
+  const form = document.getElementById('chat-form');
+  const input = document.getElementById('message-input');
+  const sidebar = document.getElementById('chat-sessions');
+  const newChatBtn = document.getElementById('new-chat-btn');
+
+  function appendMessage(role, content) {
+    const wrapper = document.createElement('div');
+    wrapper.className = `message-wrapper ${role}`;
+
+    const bubble = document.createElement('div');
+    bubble.className = `message-bubble ${role}`;
+    bubble.innerHTML = `<strong>${role}</strong>: ${content.replace(/\n/g,'<br>')}`;
+    wrapper.appendChild(bubble);
+    messagesDiv.appendChild(wrapper);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+  }
+
+  async function loadHistory() {
+    messagesDiv.innerHTML = '';
+    const resp = await fetch("{% url 'chatapp:get_history' %}?session_id=" + sessionIdInput.value);
+    if (!resp.ok) {
+      messagesDiv.innerHTML = '<div class="error-msg">Failed to load history</div>';
+      return;
+    }
+    const data = await resp.json();
+    data.messages.forEach(m => appendMessage(m.role, m.content));
+  }
+
+  form.addEventListener('submit', async (e) => {
+    e.preventDefault();
+    const text = input.value.trim();
+    if (!text) return;
+
+    appendMessage('user', text);
+    input.value = '';
+
+    const loading = document.createElement('div');
+    loading.id = "assistant-loading";
+    loading.className = "loading-msg";
+    loading.innerText = "assistant: typing...";
+    messagesDiv.appendChild(loading);
+    messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+    try {
+      const resp = await fetch("{% url 'chatapp:send_message' %}", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRFToken': getCookie('csrftoken'),
+        },
+        body: JSON.stringify({ session_id: sessionIdInput.value, message: text })
+      });
+      const data = await resp.json();
+      document.getElementById('assistant-loading')?.remove();
+      if (resp.ok) {
+        appendMessage('assistant', data.assistant);
+      } else {
+        appendMessage('assistant', "Error: " + (data.detail || JSON.stringify(data)));
+      }
+    } catch (err) {
+      document.getElementById('assistant-loading')?.remove();
+      appendMessage('assistant', "Network Error");
+    }
+  });
+
+  function getCookie(name) {
+    let cookieValue = null;
+    const cookies = document.cookie.split(';');
+    for (let c of cookies) {
+      c = c.trim();
+      if (c.startsWith(name + '=')) {
+        cookieValue = decodeURIComponent(c.substring(name.length + 1));
+      }
+    }
+    return cookieValue;
+  }
+
+  // Chat sessions management
+  async function loadSessions() {
+    sidebar.innerHTML = '';
+    const resp = await fetch("{% url 'chatapp:list_sessions' %}");
+    const data = await resp.json();
+    data.sessions.forEach(s => {
+      const li = document.createElement('li');
+      li.className = "chat-session-item";
+      li.innerText = s.title;
+      li.onclick = () => openSession(s.id);
+      sidebar.appendChild(li);
+    });
+  }
+
+  async function openSession(id) {
+    sessionIdInput.value = id;
+    await loadHistory();
+  }
+
+  newChatBtn.onclick = async () => {
+    const resp = await fetch("{% url 'chatapp:new_chat' %}", {
+      method: 'POST',
+      headers: { 'X-CSRFToken': getCookie('csrftoken') }
+    });
+    const data = await resp.json();
+    sessionIdInput.value = data.session_id;
+    loadHistory();
+    loadSessions();
+  };
+
+  loadHistory();
+  loadSessions();
+</script>
+
+{% endblock %}

@@ -1,0 +1,27 @@
+{% extends "authapp/layout.html" %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <h1>Signup</h1>
+    <p style="text-align:center;">Ready to signup?</p>
+
+    <!-- Key fixes here -->
+    <form method="post" action="{% url 'authapp:signup' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <!-- Optional: show non-field errors (e.g. password mismatch) -->
+        {% if form.non_field_errors %}
+            <div class="error">{{ form.non_field_errors }}</div>
+        {% endif %}
+
+        <button type="submit">Sign Up</button>
+    </form>
+
+    <p style="margin-top: 14px; text-align:center;">
+        Already have an account?
+        <a href="{% url 'authapp:login' %}">Login here</a>
+    </p>
+</div>
+{% endblock %}

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}My App{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chatapp/css/chat.css' %}">
+</head>
+
+<body class="" id="body-theme">
+    <!-- NAVBAR -->
+    <nav class="navbar">
+        <a href="{% url 'authapp:home' %}" class="logo">Flow AI</a>
+        <!-- {% url 'authapp:home' %}-->
+    </nav>
+    <!-- Theme Toggle Switch -->
+    <div class="theme-toggle-container">
+        <button id="theme-toggle" class="theme-toggle-btn">🌙 Dark Mode</button>
+    </div>
+
+    {% block content %}{% endblock %}
+
+    <script>
+        const body = document.getElementById("body-theme");
+        const toggleBtn = document.getElementById("theme-toggle");
+    
+        // Load saved theme
+        const saved = localStorage.getItem("theme");
+        if (saved === "dark") {
+            body.classList.add("dark-mode");
+            toggleBtn.innerText = "☀️ Light Mode";
+        } else {
+            body.classList.remove("dark-mode");
+            toggleBtn.innerText = "🌙 Dark Mode";
+        }
+    
+        toggleBtn.addEventListener("click", (e) => {
+            e.stopPropagation();  // prevent event bubbling
+            if (body.classList.contains("dark-mode")) {
+                body.classList.remove("dark-mode");
+                toggleBtn.innerText = "🌙 Dark Mode";
+                localStorage.setItem("theme", "light");
+            } else {
+                body.classList.add("dark-mode");
+                toggleBtn.innerText = "☀️ Light Mode";
+                localStorage.setItem("theme", "dark");
+            }
+        });
+    </script>
+    
+
+</body>
+
+</html>
+
+
+
+
+

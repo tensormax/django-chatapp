@@ -1,0 +1,13 @@
+{% extends "authapp/layout.html" %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="auth-card">
+    <h1>Welcome</h1>
+
+    <div class="index-links">
+        <a href="{% url 'authapp:signup' %}" class="index-btn">Signup</a>
+        <a href="{% url 'authapp:login' %}" class="index-btn">Login</a>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,27 @@
+.env
+# Python
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.db
+*.sqlite3
+
+# Virtual Environment
+venv/
+myenv/
+
+# Django
+*.log
+*.pot
+*.pyc
+*.mo
+*.sqlite3
+
+# Node / Tailwind (if any)
+node_modules/
+dist/
+
+# VS Code / IDE files
+.vscode/
+.idea/

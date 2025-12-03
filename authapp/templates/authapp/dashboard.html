@@ -1,0 +1,9 @@
+{% extends 'authapp/layout.html' %}
+
+{% block content %}
+
+<h1>Hi user welcome this is your dashboard!</h1>
+<button type="submit"><a href="{% url 'authapp:logout' %}">Log out here</a></button>
+
+
+{% endblock %}

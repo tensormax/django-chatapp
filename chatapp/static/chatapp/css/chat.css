@@ -1,0 +1,345 @@
+/* ================================
+   FLOW AI — Premium Chat UI
+   Dark/Light Mode & Premium Styling
+   ================================ */
+
+   :root {
+    --bg-light: #f6f7f9;
+    --bg-dark: #0f0f0f;
+
+    --sidebar-light: rgba(255, 255, 255, 0.7);
+    --sidebar-dark: rgba(25, 25, 25, 0.6);
+
+    --card-light: rgba(255, 255, 255, 0.8);
+    --card-dark: rgba(20, 20, 20, 0.75);
+
+    --border-light: rgba(0, 0, 0, 0.1);
+    --border-dark: rgba(255, 255, 255, 0.1);
+
+    --text-light: #000;
+    --text-dark: #f5f5f5;
+
+    --accent: linear-gradient(135deg, #6366f1, #a855f7);
+
+    --toggle-bg-light: #ffffff;
+    --toggle-bg-dark: #292929;
+    --toggle-glow: rgba(99, 102, 241, 0.4);
+}
+
+/* ----------------------------
+   BODY & PAGE LAYOUT
+-----------------------------*/
+body {
+    background: var(--bg-light);
+    color: var(--text-light);
+    transition: background 0.3s, color 0.3s;
+    font-family: 'Inter', sans-serif;
+}
+
+body.dark-mode {
+    background: var(--bg-dark);
+    color: var(--text-dark);
+}
+
+.page-container {
+    padding-top: 70px;
+}
+
+/* ----------------------------
+   NAVBAR / LOGO
+-----------------------------*/
+.navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+    backdrop-filter: blur(12px);
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.55);
+    transition: background 0.3s;
+}
+body.dark-mode .navbar {
+    background: rgba(20,20,20,0.45);
+}
+
+.logo {
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+    background: var(--accent);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    transition: 0.25s;
+    margin-top: -4px;   /* push it slightly up */
+}
+
+.logo:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
+}
+
+/* ----------------------------
+   CHAT CONTAINER
+-----------------------------*/
+.chat-container {
+    display: flex;
+    width: 100%;
+    height: calc(100vh - 70px);
+    overflow: hidden;
+}
+
+/* ----------------------------
+   SIDEBAR
+-----------------------------*/
+.chat-sidebar {
+    width: 260px;
+    padding: 20px;
+    backdrop-filter: blur(14px);
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    transition: 0.3s ease;
+    background: var(--sidebar-light);
+    border-right: 1px solid var(--border-light);
+}
+body.dark-mode .chat-sidebar {
+    background: var(--sidebar-dark);
+    border-right: 1px solid var(--border-dark);
+}
+
+.chat-sidebar.collapsed {
+    width: 70px;
+    overflow: hidden;
+}
+
+.sidebar-title {
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* Sidebar buttons */
+.btn-toggle-sidebar {
+    font-size: 20px;
+    cursor: pointer;
+    border: none;
+    background: none;
+    color: inherit;
+    padding: 8px 0;
+    border-radius: 8px;
+    transition: 0.25s;
+}
+.btn-toggle-sidebar:hover {
+    background: rgba(99,102,241,0.15);
+}
+
+.btn-new-chat {
+    padding: 10px;
+    border-radius: 8px;
+    border: none;
+    background: var(--accent);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.btn-new-chat:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Sessions list */
+.chat-sessions-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    overflow-y: auto;
+    flex-grow: 1;
+}
+.chat-session-item {
+    padding: 10px;
+    border-radius: 6px;
+    margin-bottom: 8px;
+    background: rgba(255,255,255,0.1);
+    cursor: pointer;
+    transition: 0.25s;
+}
+.chat-session-item:hover {
+    background: rgba(255,255,255,0.2);
+}
+body.dark-mode .chat-session-item {
+    background: #1a1a1a;
+    border-bottom: 1px solid #222;
+}
+body.dark-mode .chat-session-item:hover {
+    background: #262626;
+}
+
+/* ----------------------------
+   MAIN CHAT AREA
+-----------------------------*/
+.chat-main {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background: var(--card-light);
+    transition: background 0.3s;
+}
+body.dark-mode .chat-main {
+    background: var(--card-dark);
+}
+
+.chat-header h1 {
+    margin-bottom: 15px;
+    font-weight: 600;
+}
+
+/* ----------------------------
+   MESSAGES
+-----------------------------*/
+.chat-messages {
+    flex-grow: 1;
+    overflow-y: auto;
+    margin-bottom: 15px;
+    padding-right: 10px;
+}
+
+.message-wrapper {
+    margin-bottom: 12px;
+    display: flex;
+}
+.message-wrapper.user {
+    justify-content: flex-end;
+}
+.message-wrapper.assistant {
+    justify-content: flex-start;
+}
+
+.message-bubble {
+    max-width: 75%;
+    padding: 12px 14px;
+    border-radius: 12px;
+    font-size: 15px;
+    line-height: 1.4;
+    transition: background 0.3s, color 0.3s;
+}
+.message-bubble.user {
+    background: var(--accent);
+    color: white;
+    border-bottom-right-radius: 4px;
+}
+.message-bubble.assistant {
+    background: rgba(255,255,255,0.15);
+    backdrop-filter: blur(8px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-bottom-left-radius: 4px;
+}
+body.dark-mode .message-bubble.user {
+    background: #1f2937;
+    color: #e5e7eb;
+}
+body.dark-mode .message-bubble.assistant {
+    background: #111827;
+    color: #d1d5db;
+}
+
+/* ----------------------------
+   INPUT BAR
+-----------------------------*/
+.chat-input-form {
+    display: flex;
+    gap: 10px;
+    background: #fff;
+    border-top: 1px solid #e1e1e1;
+    padding: 10px;
+}
+body.dark-mode .chat-input-form {
+    background: #111;
+    border-top: 1px solid #222;
+}
+
+.chat-input {
+    flex: 1;
+    padding: 12px;
+    border-radius: 10px;
+    border: 1px solid var(--border-light);
+    background: rgba(255,255,255,0.12);
+    color: inherit;
+    outline: none;
+    resize: none;
+    height: 60px;
+    transition: 0.25s;
+}
+.chat-input:focus {
+    border-color: #6366f1;
+    background: rgba(255,255,255,0.18);
+}
+body.dark-mode .chat-input {
+    background: #1a1a1a;
+    color: #fff;
+    border-color: #333;
+}
+
+.btn-send {
+    padding: 0 18px;
+    border: none;
+    border-radius: 10px;
+    background: var(--accent);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.25s;
+}
+.btn-send:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* ============================
+   THEME TOGGLE BUTTON — BOTTOM LEFT TORCH
+============================ */
+
+.theme-toggle-container {
+    position: fixed;
+    bottom: 20px;      /* distance from bottom */
+    left: 20px;        /* distance from left */
+    z-index: 2000;     /* above content */
+    pointer-events: auto;
+}
+
+.theme-toggle-btn {
+    width: 40px;               /* small circular button */
+    height: 40px;
+    font-size: 0;              /* no text */
+    border-radius: 50%;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #292929;       /* dark mode default */
+    box-shadow: 0 0 12px #6366f1;  /* subtle glow */
+    transition: transform 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+}
+
+.theme-toggle-btn:hover {
+    transform: scale(1.1);
+    box-shadow: 0 0 16px #6366f1;
+}
+
+/* Dark mode appearance */
+body.dark-mode .theme-toggle-btn {
+    background: #e5e5e5;       /* light mode glow */
+    box-shadow: 0 0 12px rgba(255,255,255,0.4);
+}
+
+body.dark-mode .theme-toggle-btn:hover {
+    box-shadow: 0 0 16px rgba(255,255,255,0.6);
+}
+
+
+
