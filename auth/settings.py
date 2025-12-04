@@ -30,7 +30,11 @@ SECRET_KEY = 'django-insecure-j$!0ru8h240)478g(*x+9c(=k%u9f($tzla=la==9^apouaoae
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [ 
+    'localhost',
+    '127.0.0.1',
+    'django-chatapp-mufy.onrender.com',
+]
 
 
 # Application definition
