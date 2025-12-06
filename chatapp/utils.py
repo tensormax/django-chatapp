@@ -10,7 +10,7 @@ def call_llm(conversation, user=None):
     url = "https://openrouter.ai/api/v1/chat/completions"
 
     payload = {
-        "model": "x-ai/grok-4.1-fast:free",
+        "model": "amazon/nova-2-lite-v1:free",
         "messages": conversation,
     }
 

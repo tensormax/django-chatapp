@@ -1,0 +1,245 @@
+/* ================================
+   Premium Authentication CSS
+   Clean • Modern • Light/Dark Mode
+   ================================ */
+
+   :root {
+    --bg-light: #f6f7f9;
+    --bg-dark: #0f0f0f;
+
+    --card-light: rgba(255, 255, 255, 0.75);
+    --card-dark: rgba(30, 30, 30, 0.75);
+
+    --border-light: rgba(0, 0, 0, 0.1);
+    --border-dark: rgba(255, 255, 255, 0.1);
+
+    --text-light: #111;
+    --text-dark: #f5f5f5;
+
+    --accent: linear-gradient(135deg, #6366f1, #a855f7);
+}
+
+/* =====================================
+   NAVBAR
+   Premium glass-like top navigation
+   ===================================== */
+
+   .navbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 60px;
+
+    display: flex;
+    align-items: center;
+    padding: 0 25px;
+
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+
+    /* Light mode */
+    background: rgba(255, 255, 255, 0.55);
+}
+
+@media (prefers-color-scheme: dark) {
+    .navbar {
+        background: rgba(20, 20, 20, 0.45);
+        border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+}
+
+/* Hide Django's gigantic help texts */
+.auth-card .helptext {
+    display: none !important;
+}
+
+/* Sometimes Django adds lists under help text: hide them too */
+.auth-card ul {
+    display: none !important;
+}
+
+
+/* LOGO */
+.logo {
+    font-size: 22px;
+    font-weight: 600;
+    text-decoration: none;
+    background: linear-gradient(135deg, #6366f1, #a855f7);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    cursor: pointer;
+    transition: 0.2s ease;
+}
+
+.logo:hover {
+    opacity: 0.8;
+    transform: translateY(-1px);
+}
+
+/* Offset page content so it doesn't hide behind navbar */
+.page-container {
+    padding-top: 80px;
+}
+
+
+
+/* Light / Dark Mode */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: var(--bg-dark);
+        color: var(--text-dark);
+    }
+
+    .auth-card {
+        background: var(--card-dark);
+        border: 1px solid var(--border-dark);
+        backdrop-filter: blur(12px);
+    }
+}
+
+@media (prefers-color-scheme: light) {
+    body {
+        background: var(--bg-light);
+        color: var(--text-light);
+    }
+
+    .auth-card {
+        background: var(--card-light);
+        border: 1px solid var(--border-light);
+        backdrop-filter: blur(12px);
+    }
+}
+
+/* Page Layout */
+.page-container {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+/* Auth Card */
+.auth-card {
+    width: 380px;
+    padding: 30px 35px;
+    border-radius: 14px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    animation: fadeIn 0.4s ease-out;
+}
+
+/* Title */
+.auth-card h1 {
+    margin-bottom: 20px;
+    text-align: center;
+    font-weight: 600;
+}
+
+/* Forms */
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+/* =============================
+   UPDATED INPUT SECTION (brighter)
+   ============================= */
+.auth-card input {
+    padding: 12px;
+    border-radius: 8px;
+    border: 1px solid var(--border-light);
+    outline: none;
+    font-size: 15px;
+    transition: 0.2s;
+
+    /* NEW lighter background for dark mode */
+    background: rgba(255,255,255,0.12);
+    color: white;
+}
+
+.auth-card input:hover {
+    background: rgba(255,255,255,0.18);
+}
+
+.auth-card input:focus {
+    background: rgba(255,255,255,0.22);
+    border-color: #6366f1;
+    box-shadow: 0 0 6px rgba(99,102,241,0.4);
+}
+
+/* Light mode input */
+@media (prefers-color-scheme: light) {
+    .auth-card input {
+        background: rgba(255,255,255,0.9);
+        color: black;
+    }
+}
+
+/* ============================= */
+
+/* Buttons */
+.auth-card button {
+    padding: 12px;
+    border: none;
+    border-radius: 8px;
+    background: var(--accent);
+    color: white;
+    font-weight: 500;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+.auth-card button:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Links */
+.auth-card a {
+    color: #6366f1;
+    text-decoration: none;
+}
+.auth-card a:hover {
+    text-decoration: underline;
+}
+
+/* Fade animation */
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(6px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+
+
+
+.index-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-top: 10px;
+}
+
+.index-btn {
+    display: block;
+    text-align: center;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 500;
+    background: var(--accent);
+    color: white !important;
+    text-decoration: none;
+    transition: 0.2s ease;
+}
+
+.index-btn:hover {
+    opacity: 0.9;
+    transform: translateY(-2px);
+}
+
+/* Smaller spacing for forms so signup isn't huge */
+.auth-card form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* was 15, now smaller */
+}

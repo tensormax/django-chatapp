@@ -15,7 +15,8 @@
     </nav>
     <!-- Theme Toggle Switch -->
     <div class="theme-toggle-container">
-        <button id="theme-toggle" class="theme-toggle-btn">🌙 Dark Mode</button>
+        <button id="theme-toggle" class="theme-toggle">🌙</button>
+
     </div>
 
     {% block content %}{% endblock %}
@@ -28,21 +29,21 @@
         const saved = localStorage.getItem("theme");
         if (saved === "dark") {
             body.classList.add("dark-mode");
-            toggleBtn.innerText = "☀️ Light Mode";
+            toggleBtn.innerText = "☀️";
         } else {
             body.classList.remove("dark-mode");
-            toggleBtn.innerText = "🌙 Dark Mode";
+            toggleBtn.innerText = "🌙";
         }
     
         toggleBtn.addEventListener("click", (e) => {
             e.stopPropagation();  // prevent event bubbling
             if (body.classList.contains("dark-mode")) {
                 body.classList.remove("dark-mode");
-                toggleBtn.innerText = "🌙 Dark Mode";
+                toggleBtn.innerText = "🌙 ";
                 localStorage.setItem("theme", "light");
             } else {
                 body.classList.add("dark-mode");
-                toggleBtn.innerText = "☀️ Light Mode";
+                toggleBtn.innerText = "☀️";
                 localStorage.setItem("theme", "dark");
             }
         });

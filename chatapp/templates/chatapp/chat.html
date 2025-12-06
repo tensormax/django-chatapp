@@ -3,23 +3,37 @@
 
 {% block title %}Chat{% endblock %}
 
+<button id="theme-toggle" class="theme-toggle">🌙</button>
+
 {% block content %}
 
 <div class="chat-container">
 
  <!-- Sidebar -->
  <aside class="chat-sidebar" id="chat-sidebar">
-    <button id="toggle-sidebar" class="btn-toggle-sidebar">☰</button>
-    <button id="new-chat-btn" class="btn-new-chat">+ New Chat</button>
 
-    <h2 class="sidebar-title">Your Chats</h2>
-    <ul id="chat-sessions" class="chat-sessions-list">
-        <!-- Sessions loaded here -->
-    </ul>
+    <!-- Toggle Button -->
+    <button id="toggle-sidebar" class="btn-toggle-sidebar">
+        <i class="icon">☰</i>
+        <span class="label">Menu</span>
+    </button>
+
+    <!-- New Chat -->
+    <button id="new-chat-btn" class="btn-new-chat">
+        <i class="icon">＋</i>
+        <span class="label">New Chat</span>
+    </button>
+
+    <!-- Title -->
+    <h2 class="sidebar-title"><span>Your Chats</span></h2>
+
+    <!-- Sessions -->
+    <ul id="chat-sessions" class="chat-sessions-list"></ul>
+
 </aside>
 
-  <!-- Main Chat Area -->
-  <main class="chat-main">
+<!-- Main Chat -->
+<main class="chat-main">
 
       <!-- Header -->
       <div class="chat-header">
@@ -35,29 +49,53 @@
       <form id="chat-form" class="chat-input-form">
           <input type="hidden" id="session-id" value="{{ session_id }}">
           <textarea id="message-input" placeholder="Type your message..." class="chat-input"></textarea>
-          <button type="submit" class="btn-send">Send</button>
+          <!--<button type="submit" class="btn-send">Send</button> -->
+          <button class="btn-send">➤</button>
+
       </form>
 
-  </main>
+</main>
 
 </div>
+
 
 <!-- JS Script -->
 <script>
 
+  // THEME TOGGLE
+const themeToggle = document.getElementById("theme-toggle");
+
+function applyTheme() {
+    const saved = localStorage.getItem("theme") || "light";
+    document.documentElement.setAttribute("data-theme", saved);
+    themeToggle.innerHTML = saved === "light" ? "🌙" : "☀️";
+}
+
+themeToggle.onclick = () => {
+    const current = document.documentElement.getAttribute("data-theme") || "light";
+    const next = current === "light" ? "dark" : "light";
+    document.documentElement.setAttribute("data-theme", next);
+    localStorage.setItem("theme", next);
+    themeToggle.innerHTML = next === "light" ? "🌙" : "☀️";
+};
+
+applyTheme();
+
+
   const sidebarEl = document.getElementById('chat-sidebar');
   const toggleSidebarBtn = document.getElementById('toggle-sidebar');
 
+  // Sidebar collapse
   toggleSidebarBtn.onclick = () => {
     sidebarEl.classList.toggle('collapsed');
   };
 
-  // Existing chat JS code for messages, history, sessions...
+  // Chat JS code
   const sessionIdInput = document.getElementById('session-id');
   const messagesDiv = document.getElementById('messages');
   const form = document.getElementById('chat-form');
   const input = document.getElementById('message-input');
-  const sidebar = document.getElementById('chat-sessions');
+  const sidebarList = document.getElementById('chat-sessions');
   const newChatBtn = document.getElementById('new-chat-btn');
 
   function appendMessage(role, content) {
@@ -67,6 +105,7 @@
     const bubble = document.createElement('div');
     bubble.className = `message-bubble ${role}`;
     bubble.innerHTML = `<strong>${role}</strong>: ${content.replace(/\n/g,'<br>')}`;
+
     wrapper.appendChild(bubble);
     messagesDiv.appendChild(wrapper);
     messagesDiv.scrollTop = messagesDiv.scrollHeight;
@@ -75,10 +114,12 @@
   async function loadHistory() {
     messagesDiv.innerHTML = '';
     const resp = await fetch("{% url 'chatapp:get_history' %}?session_id=" + sessionIdInput.value);
+
     if (!resp.ok) {
       messagesDiv.innerHTML = '<div class="error-msg">Failed to load history</div>';
       return;
     }
+
     const data = await resp.json();
     data.messages.forEach(m => appendMessage(m.role, m.content));
   }
@@ -107,13 +148,16 @@
         },
         body: JSON.stringify({ session_id: sessionIdInput.value, message: text })
       });
+
       const data = await resp.json();
       document.getElementById('assistant-loading')?.remove();
+
       if (resp.ok) {
         appendMessage('assistant', data.assistant);
       } else {
         appendMessage('assistant', "Error: " + (data.detail || JSON.stringify(data)));
       }
+
     } catch (err) {
       document.getElementById('assistant-loading')?.remove();
       appendMessage('assistant', "Network Error");
@@ -132,17 +176,23 @@
     return cookieValue;
   }
 
-  // Chat sessions management
+  // Load sessions
   async function loadSessions() {
-    sidebar.innerHTML = '';
+    sidebarList.innerHTML = '';
     const resp = await fetch("{% url 'chatapp:list_sessions' %}");
     const data = await resp.json();
+
     data.sessions.forEach(s => {
       const li = document.createElement('li');
       li.className = "chat-session-item";
-      li.innerText = s.title;
+
+      li.innerHTML = `
+        <i class="icon">💬</i>
+        <span>${s.title}</span>
+      `;
+
       li.onclick = () => openSession(s.id);
-      sidebar.appendChild(li);
+      sidebarList.appendChild(li);
     });
   }
 
@@ -158,12 +208,14 @@
     });
     const data = await resp.json();
     sessionIdInput.value = data.session_id;
+
     loadHistory();
     loadSessions();
   };
 
   loadHistory();
   loadSessions();
+
 </script>
 
 {% endblock %}
