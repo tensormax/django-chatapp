@@ -37,7 +37,7 @@ ALLOWED_HOSTS = env.list(
     default=[
         "localhost",
         "127.0.0.1"
-        "onrender.com"
+        "django-chatapp-mufy.onrender.com"
     ]
 )
 
