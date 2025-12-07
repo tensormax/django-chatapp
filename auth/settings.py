@@ -28,7 +28,7 @@ if ENV_FILE.exists():
 # -------------------------------------------------------
 # Core settings
 # -------------------------------------------------------
-DEBUG = env("DEBUG")
+DEBUG = env.bool("DEBUG", default=False)
 
 SECRET_KEY = env("DJANGO_SECRET")
 
@@ -36,7 +36,8 @@ ALLOWED_HOSTS = env.list(
     "ALLOWED_HOSTS",
     default=[
         "localhost",
-        "127.0.0.1",
+        "127.0.0.1"
+        "onrender.com"
     ]
 )
 

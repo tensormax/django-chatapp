@@ -9,7 +9,6 @@ __pycache__/
 # Virtual Environment
 venv/
 myenv/
-.env
 
 # Django
 *.log
@@ -24,3 +23,8 @@ dist/
 # VS Code / IDE files
 .vscode/
 .idea/
+
+
+#env
+.env
+*.env
