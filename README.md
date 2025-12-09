@@ -1,125 +1,112 @@
-##Django ChatApp
+# Django ChatApp
 
-A modern, clean, real-time styled chat interface built using Django, designed with a UI inspired by Notion, ChatGPT, and Flow AI.
-This project is production-ready and deployed on Render.
+A clean, modern AI chat application built with **Django**, connected to **API** for LLM responses, and deployed on **Render**.
 
-🚀 Features
+🔗 **Live Demo:**  
+https://django-chatapp-mufy.onrender.com/
 
-🔐 User Authentication (Login & Signup)
+---
 
-💬 Clean, minimalistic chat UI
+## Features
 
-🌗 Light/Dark Theme Toggle
+- Modern chat UI (inspired by ChatGPT & Notion)
+- API LLM integration (`amazon/nova-2-lite-v1:free`)
+- Secure environment variable management
+- Dark/Light theme toggle
+- Authentication system (login & signup)
+- Production deployment using **Gunicorn + Render**
+- Supports both **local installation** and **Docker deployment**
 
-⚡ Fast and optimized Django backend
-
-🐳 Docker support for easy deployment
-
-🔧 Fully environment-variable driven configuration
-
-🗄️ Gunicorn for production
-
-🏗️ Tech Stack
-
-Backend: Django, Python
-
-Frontend: HTML, CSS, JS
-
-Production Server: Gunicorn
-
-Hosting: Render
-
-Containerization: Docker
-
-🔧 Environment Variables
-
-Create a .env file (never commit this to GitHub):
-
-DEBUG=False
-DJANGO_SECRET=your-secret-key
-ALLOWED_HOSTS=your-render-url,localhost,127.0.0.1
+---
 
 
-In Render → Environment → Add these exact keys.
+## Tech Stack
+
+- **Backend:** Django, Python  
+- **Frontend:** HTML, CSS, Django Templates  
+- **AI Model:** OpenRouter API  
+- **Deployment:** Render  
+- **Server:** Gunicorn  
+- **Static Files:** Whitenoise  
+
+---
+
+## 📦 Installation (Local - Requirements.txt)
 
 
-⚙️ Local Installation (without Docker)
-1️⃣ Clone Repo
+### 1. Clone the repository
+```bash
 git clone https://github.com/tensormax/django-chatapp
 cd django-chatapp
-
-2️⃣ Create Virtual Environment
-python3 -m venv venv
-source venv/bin/activate   # macOS/Linux
-venv\Scripts\activate      # Windows
-
-3️⃣ Install Dependencies
-pip install -r requirements.txt
-
-4️⃣ Add Environment Variables
-
-Create .env file:
-
-DEBUG=True
-DJANGO_SECRET=your-secret
-ALLOWED_HOSTS=localhost,127.0.0.1
-
-5️⃣ Run Migrations
+cd auth
+python manage.py makemigrations
 python manage.py migrate
-
-6️⃣ Start Development Server
 python manage.py runserver
+```
 
+### 2. Create & activate virtual environment
 
-App will be available at:
-👉 http://127.0.0.1:8000/
-
-🐳 Run Using Docker (Recommended)
-1️⃣ Build the Docker Image
-docker build -t django-chatapp .
-
-2️⃣ Run the Container
-docker run -p 8000:8000 \
-  -e DEBUG=False \
-  -e DJANGO_SECRET=your-secret-key \
-  -e ALLOWED_HOSTS=localhost,127.0.0.1 \
-  django-chatapp
-
-
-The app will be available at:
-👉 http://localhost:8000/
-
-3️⃣ Pull Image (If Pushed to Docker Hub)
-docker pull your-username/django-chatapp
-docker run -p 8000:8000 your-username/django-chatapp
-
-🚀 Deployment (Render)
-
-Your Render configuration:
-
-Build Command:
-
+```bash
+python3 -m venv env
+source env/bin/activate    # Mac/Linux
+env\Scripts\activate       # Windows
+```
+### 3. Install dependencies
+```bash
 pip install -r requirements.txt
+```
+### 4. Create a .env file in the project root
+```bash
+DEBUG=True
+DJANGO_SECRET=your-secret-key
+OPENROUTER_KEY=your-openrouter-api-key
+ALLOWED_HOSTS=127.0.0.1,localhost
+```
 
+```bash
+cd auth
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+```
 
-Start Command:
+The app will be live localy at: http://127.0.0.1:8000/
 
-gunicorn auth.wsgi:application --bind 0.0.0.0:$PORT
+### 1. Build the Docker image
 
+```bash
+docker build -t django-chatapp .
+```
+### 2. Run the container
+```bash
+docker run -p 8000:8000 \
+    -e DEBUG=False \
+    -e DJANGO_SECRET=your-secret-key \
+    -e OPENROUTER_KEY=your-openrouter-api-key \
+    -e ALLOWED_HOSTS=127.0.0.1 \
+    django-chatapp
+```
 
-Add .env variables inside Render Dashboard → Environment
+Your Dockerized app will be available at:
+http://127.0.0.1:8000/
 
-After disabling auto-deploy, deploy manually via:
-Dashboard → Manual Deploy → Deploy Latest Commit
+### Project Structure
 
-
-📦 Project Structure
+```bash
 django-chatapp/
-│── auth/                  # Main Django project
-│── chatapp/               # App with chat UI
-│── static/                # CSS, JS, icons
-│── templates/             # HTML templates
-│── requirements.txt
-│── Dockerfile
-│── manage.py
-└── README.md
+├── auth/                     # Django project directory
+├── authapp/                  # Authentication app
+├── chatapp/                  # Chat UI + OpenRouter logic
+├── templates/                # HTML templates
+├── staticfiles/              # Static files for Render
+├── utils.py                  # OpenRouter API call logic
+├── requirements.txt
+├── Dockerfile
+├── README.md
+└── manage.py
+
+
+```
+
+--------The END--------
+
