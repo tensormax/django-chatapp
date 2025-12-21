@@ -105,11 +105,6 @@ def get_history(request):
     return JsonResponse({'messages': messages})
 
 
-
-from django.views.decorators.http import require_POST
-from django.contrib.auth.decorators import login_required
-import json
-
 @login_required
 @require_POST
 def new_chat(request):
