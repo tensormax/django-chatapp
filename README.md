@@ -10,7 +10,7 @@ https://django-chatapp-mufy.onrender.com/
 ## Features
 
 - Modern chat UI (inspired by ChatGPT & Notion)
-- API LLM integration (`amazon/nova-2-lite-v1:free`)
+- API LLM integration (`openrouter api key: amazon/nova-2-lite-v1:free`)
 - Secure environment variable management
 - Dark/Light theme toggle
 - Authentication system (login & signup)
